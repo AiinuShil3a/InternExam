@@ -1,12 +1,17 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
+const bodyParser = require('body-parser');
+const cmsUserRoutes = require('./routes/cmsUserRoutes');
 const sequelize = require('./config');
-const userSchema = require('./schema/userSchema');
-const userResolver = require('./resolvers/userResolver');
 
 const app = express();
 
-// ตรวจสอบการเชื่อมต่อกับฐานข้อมูล
+// ใช้ bodyParser เพื่อแปลงข้อมูลใน request body
+app.use(bodyParser.json());
+
+// ใช้ route สำหรับการสร้างผู้ใช้ใหม่
+app.use('/api', cmsUserRoutes);
+
+// เชื่อมต่อกับฐานข้อมูล
 sequelize.authenticate()
   .then(() => {
     console.log('Database connected...');
@@ -15,25 +20,7 @@ sequelize.authenticate()
     console.error('Error connecting to the database:', err);
   });
 
-// สร้างฟังก์ชันเพื่อเริ่มต้นเซิร์ฟเวอร์
-async function startApolloServer() {
-  // สร้าง Apollo Server
-  const server = new ApolloServer({
-    typeDefs: userSchema,
-    resolvers: userResolver,
-  });
-
-  // เรียก server.start() ก่อนเชื่อมกับ Express
-  await server.start();
-
-  // เชื่อมต่อ Apollo Server กับ Express
-  server.applyMiddleware({ app });
-
-  // กำหนดให้เซิร์ฟเวอร์ฟังที่พอร์ต 4000
-  app.listen(4000, () => {
-    console.log('Server running at http://localhost:4000/graphql');
-  });
-}
-
-// เรียกฟังก์ชันเริ่มต้น
-startApolloServer();
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

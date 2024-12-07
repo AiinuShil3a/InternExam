@@ -29,12 +29,12 @@ const User = sequelize.define('users', {
   ],
 });
 
-sequelize.sync({ alter: false }) // `alter: true` จะทำการแก้ไขตารางที่มีอยู่แล้ว
-  .then(() => {
-    console.log("Database synced and indexes created!");
-  })
-  .catch((error) => {
-    console.error("Error syncing database:", error);
-  });
+// sequelize.sync({ alter: false }) // `alter: true` จะทำการแก้ไขตารางที่มีอยู่แล้ว
+//   .then(() => {
+//     console.log("Database synced and indexes created!");
+//   })
+//   .catch((error) => {
+//     console.error("Error syncing database:", error);
+//   });
 
 module.exports = User;

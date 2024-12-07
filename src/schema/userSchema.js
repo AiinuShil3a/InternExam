@@ -1,20 +1,34 @@
 const { gql } = require('apollo-server-express');
 
 const userSchema = gql`
-  type User {
-    id: ID!
-    first_name: String!
-    last_name: String!
-    email: String!
+  type CmsAccount {
+    cms_account_id: Int
+    cms_firstname: String
+    cms_lastname: String
+    cms_email: String
+    cms_role_id: Int
+    cms_mobile_number: String
+    cms_mobile_country_code: String
   }
 
-  type Query {
-    getUsers: [User]
-    getUser(id: ID!): User
+  type Response {
+    success: Boolean
+    message: String
+  }
+
+  input CmsUserCreateAdminInput {
+    cms_firstname: String!
+    cms_lastname: String!
+    cms_email: String!
+    cms_role_id: Int!
+    cms_mobile_number: String
+    cms_mobile_country_code: String
   }
 
   type Mutation {
-    createUser(first_name: String!, last_name: String!, email: String!): User
+    cmsUserCreateAdminAccount(
+      input: CmsUserCreateAdminInput!
+    ): Response
   }
 `;
 
